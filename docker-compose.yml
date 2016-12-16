@@ -1,0 +1,50 @@
+version: '2'
+
+services:
+
+  mysql:
+    image: mysql:5.7
+    container_name: acme-app-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=toor
+      - MYSQL_USER=app
+      - MYSQL_DATABASE=app
+      - MYSQL_PASSWORD=app
+    volumes:
+      - /var/docker/acme/app/var/lib/mysql:/var/lib/mysql
+
+  adminer:
+    image: clue/adminer
+    container_name: acme-app-adminer
+    environment:
+      - VIRTUAL_HOST=dev.adminer.app.acme.docker
+    depends_on:
+      - mysql
+
+  php:
+    image: idci/php:5.6-fpm
+    container_name: acme-app-php
+    build:
+      context: docker/build/php5.6
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - mysql
+
+  nginx:
+    image: nginx:1.10
+    container_name: acme-app-nginx
+    environment:
+      - VIRTUAL_HOST=dev.app.acme.fr
+    volumes_from:
+      - php
+    volumes:
+      - ./docker/nginx_conf/symfony.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+
+networks:
+
+  default:
+    external:
+      name: dev
