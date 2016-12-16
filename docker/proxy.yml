@@ -9,7 +9,7 @@ services:
       - "80:80"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./conf//nginx_conf/proxy.conf:/etc/nginx/conf.d/proxy.conf:ro
+      - ./conf/nginx_conf/proxy.conf:/etc/nginx/conf.d/proxy.conf:ro
 
 networks:
 
