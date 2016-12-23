@@ -14,8 +14,8 @@ Then run your containers:
 
 ```bash
 docker network create dev
-docker-compose -f docker/proxy.yml up -d # run the proxy
-docker-compose up -d                     # run the entire stack
+docker-compose -f docker/proxy-docker-compose.yml up -d # run the proxy
+docker-compose up -d                                    # run the entire stack
 ````
 
 Benefit
