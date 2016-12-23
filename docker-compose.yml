@@ -12,6 +12,7 @@ services:
       - MYSQL_PASSWORD=app
     volumes:
       - /var/docker/acme/app/var/lib/mysql:/var/lib/mysql
+      - ./docker/conf/mysql/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
 
   adminer:
     image: clue/adminer
@@ -39,7 +40,7 @@ services:
     volumes_from:
       - php
     volumes:
-      - ./docker/nginx_conf/symfony.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/conf/nginx/symfony.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - php
 
