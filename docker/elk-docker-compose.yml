@@ -1,0 +1,40 @@
+version: '2'
+
+services:
+
+  elasticsearch:
+    image: elasticsearch:5.1.1
+    container_name: elasticsearch-node-1
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+
+  logstash:
+    image: logstash:5.1.1
+    container_name: logstash
+    command: -f /etc/logstash/conf.d/ --config.reload.automatic
+    volumes:
+      - ./conf/logstash/:/etc/logstash/conf.d/
+      - /var/log/logstash:/var/log/logstash/
+    ports:
+      - "5000:5000"
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    image: kibana:5.1.1
+    container_name: kibana
+    volumes:
+      - ./conf/kibana/kibana.yml:/etc/kibana/kibana.yml
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+
+networks:
+
+  default:
+    external:
+      name: dev

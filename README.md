@@ -15,6 +15,7 @@ Then run your containers:
 ```bash
 docker network create dev
 docker-compose -f docker/proxy-docker-compose.yml up -d # run the proxy
+docker-compose -f docker/elk-docker-compose.yml up -d   # run the elk stack
 docker-compose up -d                                    # run the entire stack
 ````
 
@@ -28,4 +29,4 @@ Benefit
 Todo
 ----
 
-Use the greatness of the ELK stack
+Improve the use of the elk stack
