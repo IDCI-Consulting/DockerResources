@@ -6,9 +6,10 @@ A set of docker resources to get quickly started on a symfony project
 Getting started
 ---------------
 
-* Copy the **docker** directory, the **docker-compose.yml** and **Makefile** in your symfony project.
+* Copy the `docker` directory, the `docker-compose.yml` and `Makefile` in your symfony project.
 * Edit the volumes, environment and container_name values in the docker-compose.yml according to your needs. (Do not use special chars in mysql env variables except underscores)
 * Edit the Makefile variables
+* Update `app_dev.php` to allow dockerized applications. See the condition snippet in `app_dev_docker_condition_snippet.php`.
 
 Then run your containers:
 
@@ -23,7 +24,7 @@ Benefit
 
 * Easily change your php version from the docker-compose file
 * Use the makefile to auto complete daily commands
-* Display all logs (proxy, nginx, php) with the **docker-compose logs -f command**.
+* Display all logs (proxy, nginx, php) with the `docker-compose logs -f command`.
 
 Todo
 ----
