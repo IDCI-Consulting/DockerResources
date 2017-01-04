@@ -1,30 +1,23 @@
 FROM php:5.6-fpm
 
 RUN apt-get update
-
-RUN apt-get install git -y
-RUN apt-get install wget -y
-RUN apt-get install libmcrypt-dev -y
-RUN apt-get install -y libxml2-dev
-RUN apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng12-dev
-RUN apt-get install -y libmemcached-dev
-RUN apt-get install -y imagemagick
-RUN apt-get install -y zlib1g-dev libicu-dev g++
+RUN apt-get install -y git wget vim
 
 # extensions
-RUN docker-php-ext-install -j$(nproc) iconv mcrypt
-RUN docker-php-ext-install mysql
-RUN docker-php-ext-install pdo
-RUN docker-php-ext-install pdo_mysql
-RUN docker-php-ext-install gd
-RUN docker-php-ext-install xml
-RUN docker-php-ext-install soap
-RUN docker-php-ext-install mbstring
-RUN docker-php-ext-install opcache
-RUN docker-php-ext-install zip
-RUN docker-php-ext-install intl
-RUN pecl install memcached && docker-php-ext-enable memcached
-RUN pecl install memcache && docker-php-ext-enable memcache
+# RUN docker-php-ext-install iconv
+# RUN docker-php-ext-install mysql
+# RUN docker-php-ext-install pdo
+# RUN docker-php-ext-install pdo_mysql
+# RUN docker-php-ext-install mbstring
+# RUN docker-php-ext-install opcache
+# RUN apt-get install zlib1g-dev -y && docker-php-ext-install zip
+# RUN apt-get install libxml2-dev -y && docker-php-ext-install soap
+# RUN apt-get install libmcrypt-dev -y && docker-php-ext-install mcrypt
+# RUN apt-get install libpng12-dev -y && docker-php-ext-install gd
+# RUN apt-get install libxml2-dev -y && docker-php-ext-install xml
+# RUN apt-get install libicu-dev -y && docker-php-ext-install intl
+# RUN apt-get install -y libmemcached-dev && pecl install memcached && docker-php-ext-enable memcached
+# RUN pecl install memcache && docker-php-ext-enable memcache
 
 # php.ini
 COPY php.ini /usr/local/etc/php/
