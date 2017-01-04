@@ -18,6 +18,7 @@ RUN apt-get install -y git wget vim
 # RUN apt-get install libicu-dev -y && docker-php-ext-install intl
 # RUN apt-get install -y libmemcached-dev && pecl install memcached && docker-php-ext-enable memcached
 # RUN pecl install memcache && docker-php-ext-enable memcache
+# RUN apt-get install pkg-config libssl-dev -y && pecl install mongo && docker-php-ext-enable mongo
 
 # php.ini
 COPY php.ini /usr/local/etc/php/
