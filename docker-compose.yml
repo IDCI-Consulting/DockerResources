@@ -18,7 +18,7 @@ services:
     image: clue/adminer
     container_name: acme-app-adminer
     environment:
-      - VIRTUAL_HOST=dev.adminer.app.acme.docker
+      - VIRTUAL_HOST=adminer.app.acme.docker
     depends_on:
       - mysql
 
@@ -36,7 +36,7 @@ services:
     image: nginx:1.10
     container_name: acme-app-nginx
     environment:
-      - VIRTUAL_HOST=dev.app.acme.fr
+      - VIRTUAL_HOST=app.acme.docker
     volumes_from:
       - php
     volumes:
