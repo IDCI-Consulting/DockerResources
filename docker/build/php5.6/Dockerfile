@@ -3,6 +3,9 @@ FROM php:5.6-fpm
 RUN apt-get update
 RUN apt-get install -y git wget vim
 
+# 3rd part libraries
+# RUN apt-get install -y imagemagick
+
 # extensions
 # RUN docker-php-ext-install iconv
 # RUN docker-php-ext-install mysql
