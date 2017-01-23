@@ -9,7 +9,8 @@ Getting started
 * Copy the `docker` directory, the `docker-compose.yml` and `Makefile` in your symfony project.
 * Edit the volumes, environment and container_name values in the docker-compose.yml according to your needs. (Do not use special chars in mysql env variables except underscores)
 * Edit the Makefile variables
-* Update `app_dev.php` to allow dockerized applications. See the condition snippet in `app_dev_docker_condition_snippet.php`.
+* Update `app_dev.php` to allow dockerized applications. (Comment the code from line 12 to 19)
+* Update the `docker/conf/nginx/vhost_symfony.conf`. Change the **fastcgi_pass** value with your php container name at line 17.
 
 Then run your containers:
 
