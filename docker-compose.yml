@@ -2,6 +2,18 @@ version: '2'
 
 services:
 
+  rabbitmq:
+    image: idci/rabbitmq:3
+    container_name: acme-app-rabbitmq
+    build:
+      context: docker/build/rabbitmq3
+    environment:
+      - RABBITMQ_DEFAULT_USER=app
+      - RABBITMQ_DEFAULT_PASS=app
+      - VIRTUAL_HOST=rabbitmq.app.acme.docker
+    ports:
+      - "15672:15672"
+
   # sysctl -w vm.max_map_count=262144
   elasticsearch:
     image: idci/elasticsearch:2.4
