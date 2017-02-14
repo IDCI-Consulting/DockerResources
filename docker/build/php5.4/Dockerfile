@@ -11,14 +11,15 @@ RUN apt-get install -y imagemagick
 RUN apt-get install -y zlib1g-dev libicu-dev g++
 
 # extensions
-RUN docker-php-ext-install mcrypt
-RUN docker-php-ext-install pdo_mysql
-RUN docker-php-ext-install gd
-RUN docker-php-ext-install soap
-RUN docker-php-ext-install mbstring
-RUN docker-php-ext-install mysql
-RUN docker-php-ext-install zip
-RUN docker-php-ext-configure intl && docker-php-ext-install intl
+#RUN docker-php-ext-install mcrypt
+#RUN docker-php-ext-install pdo_mysql
+#RUN docker-php-ext-install gd
+#RUN docker-php-ext-install soap
+#RUN docker-php-ext-install mbstring
+#RUN docker-php-ext-install mysql
+#RUN docker-php-ext-install zip
+#RUN docker-php-ext-install bcmath
+#RUN docker-php-ext-configure intl && docker-php-ext-install intl
 
 # php.ini
 COPY php.ini /usr/local/etc/php/
