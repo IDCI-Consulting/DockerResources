@@ -21,6 +21,16 @@ docker-compose -f docker/elasticsearch-docker-compose.yml up -d # run the elasti
 docker-compose up -d                                            # run the entire stack
 ````
 
+Node.js
+-------
+
+If you want to install `npm` & `bower` packages, you can use the Makefile commands:
+
+```sh
+$ make npm-install
+$ make bower-install
+```
+
 Benefit
 -------
 

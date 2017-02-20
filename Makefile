@@ -25,4 +25,14 @@ mysql-import:
 command:
 	docker exec -it $(php_container_name) bash -c "$(cmd); exit $$?"
 
+npm-install:
+	docker-compose -f node-docker-compose.yml run node bash -c "npm install; exit $$?"
+
+bower-install:
+	docker-compose -f node-docker-compose.yml run node bash -c "bower install --allow-root; exit $$?"
+
+gulp:
+	docker-compose -f node-docker-compose.yml run --service-ports node bash -c "gulp $(task)"
+
+
 default: pac
