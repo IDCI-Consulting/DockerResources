@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+
+  # sysctl -w vm.max_map_count=262144
+  elasticsearch:
+    image: idci/elasticsearch:1.7
+    container_name: digifid-elasticsearch
+    build:
+      context: ./build/elasticsearch1.7
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+
+networks:
+
+  default:
+    external:
+      name: dev
