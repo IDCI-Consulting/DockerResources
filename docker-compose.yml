@@ -8,8 +8,8 @@ services:
     build:
       context: docker/build/rabbitmq3
     environment:
-      - RABBITMQ_DEFAULT_USER=app
-      - RABBITMQ_DEFAULT_PASS=app
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
       - VIRTUAL_HOST=${VIRTUAL_HOST_RABBITMQ}
     ports:
       - "15672:15672"
@@ -18,10 +18,10 @@ services:
     image: mysql:5.7
     container_name: ${COMPANY_NAME}-${PROJECT_NAME}-mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=toor
-      - MYSQL_USER=app
-      - MYSQL_DATABASE=app
-      - MYSQL_PASSWORD=app
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     volumes:
       - ${VOLUME_ROOT_PATH}/${COMPANY_NAME}/${PROJECT_NAME}/mysql:/var/lib/mysql
       - ./docker/conf/mysql/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
@@ -35,10 +35,10 @@ services:
       - mysql
 
   php:
-    image: ${COMPANY_NAME}-${PROJECT_NAME}-php/php:5.6-fpm
+    image: ${COMPANY_NAME}-${PROJECT_NAME}-php/php:${PHP_VERSION}-fpm
     container_name: ${COMPANY_NAME}-${PROJECT_NAME}-php
     build:
-      context: docker/build/php5.6
+      context: docker/build/php.${PHP_VERSION}
     volumes:
       - ./:/var/www/html
       - ${VOLUME_ROOT_PATH}/${COMPANY_NAME}/${PROJECT_NAME}/composer:/root/.composer
