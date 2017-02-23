@@ -3,7 +3,7 @@ version: '2'
 services:
 
   rabbitmq:
-    image: idci/rabbitmq:3
+    image: ${COMPANY_NAME}-${PROJECT_NAME}-php/rabbitmq:3
     container_name: ${COMPANY_NAME}-${PROJECT_NAME}-rabbitmq
     build:
       context: docker/build/rabbitmq3
@@ -35,7 +35,7 @@ services:
       - mysql
 
   php:
-    image: idci/php:5.6-fpm
+    image: ${COMPANY_NAME}-${PROJECT_NAME}-php/php:5.6-fpm
     container_name: ${COMPANY_NAME}-${PROJECT_NAME}-php
     build:
       context: docker/build/php5.6
@@ -62,4 +62,4 @@ networks:
 
   default:
     external:
-      name: dev
+      name: ${NETWORK_NAME}
