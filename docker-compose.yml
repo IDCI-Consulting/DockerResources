@@ -23,7 +23,7 @@ services:
       - MYSQL_DATABASE=app
       - MYSQL_PASSWORD=app
     volumes:
-      - ${VOLUME_ROOT_PATH}/${PROJECT_NAME}/mysql:/var/lib/mysql
+      - ${VOLUME_ROOT_PATH}/${COMPANY_NAME}/${PROJECT_NAME}/mysql:/var/lib/mysql
       - ./docker/conf/mysql/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
 
   adminer:
@@ -41,7 +41,7 @@ services:
       context: docker/build/php5.6
     volumes:
       - ./:/var/www/html
-      - ${VOLUME_ROOT_PATH}/${PROJECT_NAME}/composer:/root/.composer
+      - ${VOLUME_ROOT_PATH}/${COMPANY_NAME}/${PROJECT_NAME}/composer:/root/.composer
     depends_on:
       - mysql
 
