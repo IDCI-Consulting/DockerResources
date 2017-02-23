@@ -10,6 +10,8 @@ mongo_dbname      = MONGO_DBNAME
 target_container ?= php
 sources          ?= src
 
+mysql_container_name = $(shell docker-compose ps |grep '^[a-Z-]*-mysql' |sed 's/-mysql .*/-mysql/')
+mongo_container_name = $(shell docker-compose ps |grep '^[a-Z-]*-mongo' |sed 's/-mongo .*/-mongo/')
 
 # Bash Commands
 
@@ -17,7 +19,7 @@ sources          ?= src
 command:
 	docker-compose run --rm $(target_container) $(cmd)
 
-.PHONY:  bash
+.PHONY: bash
 bash:
 	docker-compose exec '$(target_container)' bash
 
@@ -25,22 +27,21 @@ bash:
 
 .PHONY: mysql-export
 mysql-export:
-	docker-compose exec mysql bash -c "mysqldump -p $(mysql_password) -u $(mysql_user) $(mysql_dbname)" > $(path)
+	docker exec -i $(mysql_container_name) bash -c "mysqldump -p$(mysql_password) -u$(mysql_user) $(mysql_dbname)" > $(path)
 
 .PHONY: mysql-import
 mysql-import:
-	docker-compose exec mysql  bash -c "mysqldump -p $(mysql_password) -u $(mysql_user) $(mysql_dbname)" > $(path)
-
+	docker exec -i $(mysql_container_name) bash -c "mysql -p$(mysql_password) -u$(mysql_user) $(mysql_dbname)" < $(path)
 
 # Mongo commands
 
 .PHONY: mongo-export
 mongo-export:
-	docker-compose exec mongo bash -c "mongoexport --db $(mongo_dbname) --collection $(mongo_collection)" > $(path)
+	docker exec -i $(mongo_container_name) bash -c "mongoexport --db $(mongo_dbname) --collection $(mongo_collection)" > $(path)
 
 .PHONY: mongo-import
 mongo-import:
-	docker-compose exec mongo bash -c "mongoimport --db $(mongo_dbname) --collection $(mongo_collection)" < $(path)
+	docker exec -i $(mongo_container_name) bash -c "mongoimport --db $(mongo_dbname) --collection $(mongo_collection)" < $(path)
 
 
 # NodeJs commands
