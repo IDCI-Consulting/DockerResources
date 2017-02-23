@@ -4,51 +4,52 @@ services:
 
   rabbitmq:
     image: idci/rabbitmq:3
-    container_name: acme-app-rabbitmq
+    container_name: ${COMPANY_NAME}-${PROJECT_NAME}-rabbitmq
     build:
       context: docker/build/rabbitmq3
     environment:
       - RABBITMQ_DEFAULT_USER=app
       - RABBITMQ_DEFAULT_PASS=app
-      - VIRTUAL_HOST=rabbitmq.app.acme.docker
+      - VIRTUAL_HOST=${VIRTUAL_HOST_RABBITMQ}
     ports:
       - "15672:15672"
 
   mysql:
     image: mysql:5.7
-    container_name: acme-app-mysql
+    container_name: ${COMPANY_NAME}-${PROJECT_NAME}-mysql
     environment:
       - MYSQL_ROOT_PASSWORD=toor
       - MYSQL_USER=app
       - MYSQL_DATABASE=app
       - MYSQL_PASSWORD=app
     volumes:
-      - /var/docker/acme/app/var/lib/mysql:/var/lib/mysql
+      - ${VOLUME_ROOT_PATH}/${PROJECT_NAME}/mysql:/var/lib/mysql
       - ./docker/conf/mysql/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
 
   adminer:
     image: clue/adminer
-    container_name: acme-app-adminer
+    container_name: ${COMPANY_NAME}-${PROJECT_NAME}-adminer
     environment:
-      - VIRTUAL_HOST=adminer.app.acme.docker
+      - VIRTUAL_HOST=${VIRTUAL_HOST_ADMINER}
     depends_on:
       - mysql
 
   php:
     image: idci/php:5.6-fpm
-    container_name: acme-app-php
+    container_name: ${COMPANY_NAME}-${PROJECT_NAME}-php
     build:
       context: docker/build/php5.6
     volumes:
       - ./:/var/www/html
+      - ${VOLUME_ROOT_PATH}/${PROJECT_NAME}/composer:/root/.composer
     depends_on:
       - mysql
 
   nginx:
     image: nginx:1.10
-    container_name: acme-app-nginx
+    container_name: ${COMPANY_NAME}-${PROJECT_NAME}-nginx
     environment:
-      - VIRTUAL_HOST=app.acme.docker
+      - VIRTUAL_HOST=${VIRTUAL_HOST_NGINX}
     volumes_from:
       - php
     volumes:

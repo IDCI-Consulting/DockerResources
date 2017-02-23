@@ -1,38 +1,114 @@
-nginx_container_name = acme-app-nginx
-php_container_name = acme-app-php
-mysql_container_name =  acme-app-mysql
+# Variables
 
-.PHONY: pac bash composer-add-github-token composer-update mysql-export mysql-import command
+mysql_password    = MYSQL_PASSWORD
+mysql_user        = MYSQL_USER
+mysql_dbname      = MYSQL_DBNAME
 
-pac:
-	docker exec -it $(php_container_name) bash -c "php app/console $(cmd); exit $$?"
+mongo_collection  = MONGO_COLLECTION
+mongo_dbname      = MONGO_DBNAME
 
-bash:
-	docker exec -it $(php_container_name) bash
+target_container ?= php
+sources          ?= src
 
-composer-add-github-token:
-	docker exec -t $(php_container_name) bash -c "composer config --global github-oauth.github.com $(token); exit $$?"
 
-composer-update:
-	docker exec -it $(php_container_name) bash -c "composer update; exit $$?"
+# Bash Commands
 
-mysql-export:
-	docker exec -t $(mysql_container_name) bash -c "mysqldump -p'app' -u app app" > $(path)
-
-mysql-import:
-	docker exec -t $(mysql_container_name) bash -c "mysql -p'app' -u app app" < $(path)
-
+.PHONY: command
 command:
-	docker exec -it $(php_container_name) bash -c "$(cmd); exit $$?"
+	docker-compose run --rm $(target_container) $(cmd)
 
+.PHONY:  bash
+bash:
+	docker-compose exec '$(target_container)' bash
+
+# Mysql commands
+
+.PHONY: mysql-export
+mysql-export:
+	docker-compose exec mysql bash -c "mysqldump -p $(mysql_password) -u $(mysql_user) $(mysql_dbname)" > $(path)
+
+.PHONY: mysql-import
+mysql-import:
+	docker-compose exec mysql  bash -c "mysqldump -p $(mysql_password) -u $(mysql_user) $(mysql_dbname)" > $(path)
+
+
+# Mongo commands
+
+.PHONY: mongo-export
+mongo-export:
+	docker-compose exec mongo bash -c "mongoexport --db $(mongo_dbname) --collection $(mongo_collection)" > $(path)
+
+.PHONY: mongo-import
+mongo-import:
+	docker-compose exec mongo bash -c "mongoimport --db $(mongo_dbname) --collection $(mongo_collection)" < $(path)
+
+
+# NodeJs commands
+
+.PHONY: npm-install
 npm-install:
-	docker-compose -f node-docker-compose.yml run node bash -c "npm install; exit $$?"
+	docker-compose run --rm node npm install
 
-bower-install:
-	docker-compose -f node-docker-compose.yml run node bash -c "bower install --allow-root; exit $$?"
-
+.PHONY: gulp
 gulp:
-	docker-compose -f node-docker-compose.yml run --service-ports node bash -c "gulp $(task)"
+	docker-compose run --rm node gulp $(task)
 
+
+# PHP commands
+
+.PHONY: composer-add-github-token
+composer-add-github-token:
+	docker-compose run --rm php composer config --global github-oauth.github.com $(token)
+
+.PHONY: composer-update
+composer-update:
+	docker-compose run --rm php composer update
+
+.PHONY: composer-install
+composer-install:
+	docker-compose run --rm php composer install
+
+.PHONY: phploc
+phploc:
+	docker run -i -v `pwd`:/project jolicode/phaudit bash -c "phploc $(sources); exit $$?"
+
+.PHONY: phpcs
+phpcs:
+	docker run -i -v `pwd`:/project jolicode/phaudit bash -c "phpcs $(sources) --standard=PSR2; exit $$?"
+
+.PHONY: phpcpd
+phpcpd:
+	docker run -i -v `pwd`:/project jolicode/phaudit bash -c "phpcpd $(sources); exit $$?"
+
+.PHONY: phpdcd
+phpdcd:
+	docker run -i -v `pwd`:/project jolicode/phaudit bash -c "phpdcd $(sources); exit $$?"
+
+
+# Symfony bundle commands
+
+.PHONY: phpunit
+phpunit: ./vendor/bin/phpunit
+	docker-compose run --rm php ./vendor/bin/phpunit --coverage-text
+
+
+# Symfony2.x app commands
+
+.PHONY: pac
+pac:
+	docker-compose run --rm php php app/console $(cmd)
+
+.PHONY: phpunit
+phpunit: ./vendor/phpunit/phpunit/phpunit.php ./app/phpunit.xml.dist
+	docker-compose run --rm php php ./vendor/phpunit/phpunit/phpunit.php -c app/
 
 default: pac
+
+
+# Symfony3.x app commands
+
+.PHONY: pbc
+pbc:
+	docker-compose run --rm php php bin/console $(cmd)
+
+default: pbc
