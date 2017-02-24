@@ -1,8 +1,8 @@
 server {
     root /var/www/html/web;
 
-    access_log /proc/self/fd/1;
-    error_log /proc/self/fd/2;
+    access_log /dev/stdout;
+    error_log /dev/stderr;
 
     charset utf-8;
 
