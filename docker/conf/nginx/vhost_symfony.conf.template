@@ -7,11 +7,11 @@ server {
     charset utf-8;
 
     location / {
-        # try to serve file directly, fallback to app.php
-        try_files $uri /app.php$is_args$args;
+        # try to serve file directly, fallback to app_dev.php
+        try_files $uri /$SYMFONY_ENTRYPOINT$is_args$args;
     }
 
-    location ~ ^/(app)\.php(/|$) {
+    location ~ ^/$SYMFONY_ENTRYPOINT(/|$) {
         fastcgi_pass $PHP_CONTAINER_NAME:9000;
         fastcgi_split_path_info ^(.+\.php)(/.*)$;
         include fastcgi_params;
