@@ -1,4 +1,4 @@
-Symfony docker resources
+Docker resources
 ========================
 
 A set of docker resources to get quickly started on a symfony project
