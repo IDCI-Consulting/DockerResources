@@ -6,11 +6,10 @@ A set of docker resources to get quickly started on a symfony project
 Getting started
 ---------------
 
-* Copy the `docker` directory, the `docker-compose.yml` and `Makefile` in your symfony project.
-* Edit the volumes, environment and container_name values in the docker-compose.yml according to your needs. (Do not use special chars in mysql env variables except underscores)
-* Edit the Makefile variables
+* Copy the `docker` directory, the `docker-compose.yml`, the `.env` and `Makefile` in your symfony project
+* Remove useless parts in each of theses files
+* Change values in `.env` file
 * Update `app_dev.php` to allow dockerized applications. (Comment the code from line 12 to 19)
-* Update the `docker/conf/nginx/vhost_symfony.conf`. Change the **fastcgi_pass** value with your php container name at line 17.
 
 Then run your containers:
 
@@ -34,9 +33,25 @@ $ make bower-install
 Benefit
 -------
 
-* Easily change your php version from the docker-compose file
+* Easily change your php version from the `.env`
 * Use the makefile to auto complete daily commands
 * Display all logs (proxy, nginx, php) with the `docker-compose logs -f command`.
+
+Tests
+-----
+
+To execute units and functionals tests:
+```sh
+$ make phpunit sources=src
+```
+
+To execute code sniffer :
+```sh
+$ make phpcs sources=src
+```
+
+'src' is the default sources value.
+
 
 Todo
 ----
