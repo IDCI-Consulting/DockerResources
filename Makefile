@@ -1,12 +1,5 @@
 # Variables
 
-mysql_password    = MYSQL_PASSWORD
-mysql_user        = MYSQL_USER
-mysql_dbname      = MYSQL_DBNAME
-
-mongo_collection  = MONGO_COLLECTION
-mongo_dbname      = MONGO_DBNAME
-
 target_container ?= php
 sources          ?= src
 
@@ -27,21 +20,21 @@ bash:
 
 .PHONY: mysql-export
 mysql-export:
-	docker exec -i $(mysql_container_name) bash -c "mysqldump -p$(mysql_password) -u$(mysql_user) $(mysql_dbname)" > $(path)
+	docker exec -i $(mysql_container_name) bash -c 'mysqldump -p$$MYSQL_PASSWORD -u$$MYSQL_USER $MYSQL_DATABASE' > $(path)
 
 .PHONY: mysql-import
 mysql-import:
-	docker exec -i $(mysql_container_name) bash -c "mysql -p$(mysql_password) -u$(mysql_user) $(mysql_dbname)" < $(path)
+	docker exec -i $(mysql_container_name) bash -c 'mysql -p$$MYSQL_PASSWORD -u$$MYSQL_USER $$MYSQL_DATABASE' < $(path)
 
 # Mongo commands
 
 .PHONY: mongo-export
 mongo-export:
-	docker exec -i $(mongo_container_name) bash -c "mongoexport --db $(mongo_dbname) --collection $(mongo_collection)" > $(path)
+	docker exec -i $(mongo_container_name) bash -c 'mongoexport --db $$MONGO_DATABASE --collection $(mongo_collection)' > $(path)
 
 .PHONY: mongo-import
 mongo-import:
-	docker exec -i $(mongo_container_name) bash -c "mongoimport --db $(mongo_dbname) --collection $(mongo_collection)" < $(path)
+	docker exec -i $(mongo_container_name) bash -c 'mongoimport --db $$MONGO_DATABASE --collection $(mongo_collection)' < $(path)
 
 
 # NodeJs commands
