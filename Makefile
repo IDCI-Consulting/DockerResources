@@ -1,8 +1,12 @@
 # Variables
 
-target_container ?= php
-php_sources      ?= src
-js_sources       ?= Resources/public/js
+target_container    ?= php
+php_sources         ?= .
+js_sources          ?= Resources/public/js
+phpcs_ignored_files ?= vendor/*,app/cache/*
+
+# Change the previous variable with the following parameters for standalone bundle
+#phpcs_ignored_files ?= vendor/*,app/cache/*,Tests/cache/*
 
 mysql_container_name = $(shell docker-compose ps |grep '^[a-Z-]*-mysql' |sed 's/-mysql .*/-mysql/')
 mongo_container_name = $(shell docker-compose ps |grep '^[a-Z-]*-mongo' |sed 's/-mongo .*/-mongo/')
@@ -27,31 +31,11 @@ mysql-export:
 mysql-import:
 	docker exec -i $(mysql_container_name) bash -c 'mysql -p$$MYSQL_PASSWORD -u$$MYSQL_USER $$MYSQL_DATABASE' < $(path)
 
-# Mongo commands
-
-.PHONY: mongo-export
-mongo-export:
-	docker exec -i $(mongo_container_name) bash -c 'mongoexport --db $$MONGO_DATABASE --collection $(mongo_collection)' > $(path)
-
-.PHONY: mongo-import
-mongo-import:
-	docker exec -i $(mongo_container_name) bash -c 'mongoimport --db $$MONGO_DATABASE --collection $(mongo_collection)' < $(path)
-
-
 # NodeJs commands
-
-.PHONY: npm-install
-npm-install:
-	docker-compose run --rm node npm install
-
-.PHONY: gulp
-gulp:
-	docker-compose run --rm node gulp $(task)
 
 .PHONY: eslint
 eslint:
 	docker-compose run --rm node eslint $(js_sources)
-
 
 # PHP commands
 
@@ -73,7 +57,7 @@ phploc:
 
 .PHONY: phpcs
 phpcs:
-	docker run -i -v `pwd`:/project jolicode/phaudit bash -c "phpcs $(php_sources) --standard=PSR2; exit $$?"
+	docker run -i -v `pwd`:/project jolicode/phaudit bash -c "phpcs $(php_sources) --extensions=php --ignore=$(phpcs_ignored_files) --standard=PSR2; exit $$?"
 
 .PHONY: phpcpd
 phpcpd:
