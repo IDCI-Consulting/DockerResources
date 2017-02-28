@@ -1,7 +1,8 @@
 # Variables
 
 target_container ?= php
-sources          ?= src
+php_sources      ?= src
+js_sources       ?= Resources/public/js
 
 mysql_container_name = $(shell docker-compose ps |grep '^[a-Z-]*-mysql' |sed 's/-mysql .*/-mysql/')
 mongo_container_name = $(shell docker-compose ps |grep '^[a-Z-]*-mongo' |sed 's/-mongo .*/-mongo/')
@@ -47,6 +48,10 @@ npm-install:
 gulp:
 	docker-compose run --rm node gulp $(task)
 
+.PHONY: eslint
+eslint:
+	docker-compose run --rm node eslint $(js_sources)
+
 
 # PHP commands
 
@@ -56,27 +61,27 @@ composer-add-github-token:
 
 .PHONY: composer-update
 composer-update:
-	docker-compose run --rm php composer update
+	docker-compose run --rm php composer update $(options)
 
 .PHONY: composer-install
 composer-install:
-	docker-compose run --rm php composer install
+	docker-compose run --rm php composer install $(options)
 
 .PHONY: phploc
 phploc:
-	docker run -i -v `pwd`:/project jolicode/phaudit bash -c "phploc $(sources); exit $$?"
+	docker run -i -v `pwd`:/project jolicode/phaudit bash -c "phploc $(php_sources); exit $$?"
 
 .PHONY: phpcs
 phpcs:
-	docker run -i -v `pwd`:/project jolicode/phaudit bash -c "phpcs $(sources) --standard=PSR2; exit $$?"
+	docker run -i -v `pwd`:/project jolicode/phaudit bash -c "phpcs $(php_sources) --standard=PSR2; exit $$?"
 
 .PHONY: phpcpd
 phpcpd:
-	docker run -i -v `pwd`:/project jolicode/phaudit bash -c "phpcpd $(sources); exit $$?"
+	docker run -i -v `pwd`:/project jolicode/phaudit bash -c "phpcpd $(php_sources); exit $$?"
 
 .PHONY: phpdcd
 phpdcd:
-	docker run -i -v `pwd`:/project jolicode/phaudit bash -c "phpdcd $(sources); exit $$?"
+	docker run -i -v `pwd`:/project jolicode/phaudit bash -c "phpdcd $(php_sources); exit $$?"
 
 
 # Symfony bundle commands
