@@ -11,6 +11,7 @@ phpcs_ignored_files ?= vendor/*,app/cache/*
 mysql_container_name = $(shell docker-compose ps |grep '^[a-Z-]*-mysql' |sed 's/-mysql .*/-mysql/')
 mongo_container_name = $(shell docker-compose ps |grep '^[a-Z-]*-mongo' |sed 's/-mongo .*/-mongo/')
 
+
 # Bash Commands
 
 .PHONY: command
@@ -20,6 +21,7 @@ command:
 .PHONY: bash
 bash:
 	docker-compose exec '$(target_container)' bash
+
 
 # Mysql commands
 
@@ -31,11 +33,13 @@ mysql-export:
 mysql-import:
 	docker exec -i $(mysql_container_name) bash -c 'mysql -p$$MYSQL_PASSWORD -u$$MYSQL_USER $$MYSQL_DATABASE' < $(path)
 
+
 # NodeJs commands
 
 .PHONY: eslint
 eslint:
 	docker-compose run --rm node eslint $(js_sources)
+
 
 # PHP commands
 
