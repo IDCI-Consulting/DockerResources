@@ -53,19 +53,19 @@ composer-install:
 
 .PHONY: phploc
 phploc:
-	docker run -i -v `pwd`:/project jolicode/phaudit bash -c "phploc $(php_sources); exit $$?"
+	docker run --rm -i -v `pwd`:/project jolicode/phaudit bash -c "phploc $(php_sources); exit $$?"
 
 .PHONY: phpcs
 phpcs:
-	docker run -i -v `pwd`:/project jolicode/phaudit bash -c "phpcs $(php_sources) --extensions=php --ignore=$(phpcs_ignored_files) --standard=PSR2; exit $$?"
+	docker run --rm -i -v `pwd`:/project jolicode/phaudit bash -c "phpcs $(php_sources) --extensions=php --ignore=$(phpcs_ignored_files) --standard=PSR2; exit $$?"
 
 .PHONY: phpcpd
 phpcpd:
-	docker run -i -v `pwd`:/project jolicode/phaudit bash -c "phpcpd $(php_sources); exit $$?"
+	docker run --rm -i -v `pwd`:/project jolicode/phaudit bash -c "phpcpd $(php_sources); exit $$?"
 
 .PHONY: phpdcd
 phpdcd:
-	docker run -i -v `pwd`:/project jolicode/phaudit bash -c "phpdcd $(php_sources); exit $$?"
+	docker run --rm -i -v `pwd`:/project jolicode/phaudit bash -c "phpdcd $(php_sources); exit $$?"
 
 
 # Symfony bundle commands
