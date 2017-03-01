@@ -34,6 +34,17 @@ mysql-import:
 	docker exec -i $(mysql_container_name) bash -c 'mysql -p$$MYSQL_PASSWORD -u$$MYSQL_USER $$MYSQL_DATABASE' < $(path)
 
 
+# Mongo commands
+
+.PHONY: mongo-export
+mongo-export:
+	docker exec -i $(mongo_container_name) bash -c "mongoexport --host localhost:27017 --db $$MONGO_DATABASE --collection $(collection)" > $(path)
+
+.PHONY: mongo-import
+mongo-import:
+	docker exec -i $(mongo_container_name) bash -c "mongoimport --host localhost:27017 --db $$MONGO_DATABASE --collection $(collection)" < $(path)
+
+
 # NodeJs commands
 
 .PHONY: eslint
