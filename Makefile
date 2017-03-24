@@ -87,7 +87,7 @@ phpdcd:
 
 .PHONY: phpunit
 phpunit: ./vendor/bin/phpunit
-	docker-compose run --rm php ./vendor/bin/phpunit --coverage-text
+	docker-compose run --rm php ./vendor/bin/phpunit --coverage-text Tests/
 
 
 # Symfony2.x app commands
