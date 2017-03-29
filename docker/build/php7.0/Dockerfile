@@ -34,6 +34,7 @@ RUN apt-get install -y zlib1g-dev libicu-dev g++
 #RUN docker-php-ext-install memcache
 #RUN docker-php-ext-install intl
 #RUN docker-php-ext-install bcmath
+#RUN docker-php-ext-install pcntl
 
 # php.ini
 COPY php.ini /usr/local/etc/php/

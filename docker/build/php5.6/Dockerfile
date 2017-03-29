@@ -14,6 +14,7 @@ RUN apt-get install -y git wget vim
 # RUN docker-php-ext-install mbstring
 # RUN docker-php-ext-install opcache
 # RUN docker-php-ext-install bcmath
+# RUN docker-php-ext-install pcntl
 # RUN apt-get install zlib1g-dev -y && docker-php-ext-install zip
 # RUN apt-get install libxml2-dev -y && docker-php-ext-install soap
 # RUN apt-get install libmcrypt-dev -y && docker-php-ext-install mcrypt
