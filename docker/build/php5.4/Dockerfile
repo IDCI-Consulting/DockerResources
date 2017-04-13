@@ -7,19 +7,19 @@ RUN apt-get install wget -y
 RUN apt-get install libmcrypt-dev -y
 RUN apt-get install -y libxml2-dev
 RUN apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng12-dev
-RUN apt-get install -y imagemagick
 RUN apt-get install -y zlib1g-dev libicu-dev g++
 
 # extensions
-#RUN docker-php-ext-install mcrypt
-#RUN docker-php-ext-install pdo_mysql
-#RUN docker-php-ext-install gd
-#RUN docker-php-ext-install soap
-#RUN docker-php-ext-install mbstring
-#RUN docker-php-ext-install mysql
-#RUN docker-php-ext-install zip
-#RUN docker-php-ext-install bcmath
-#RUN docker-php-ext-configure intl && docker-php-ext-install intl
+# RUN docker-php-ext-install mcrypt
+# RUN docker-php-ext-install pdo_mysql
+# RUN docker-php-ext-install gd
+# RUN docker-php-ext-install soap
+# RUN docker-php-ext-install mbstring
+# RUN docker-php-ext-install mysql
+# RUN docker-php-ext-install zip
+# RUN docker-php-ext-install bcmath
+# RUN docker-php-ext-configure intl && docker-php-ext-install intl
+# RUN apt-get install -y libmagickwand-dev && pecl install imagick  && docker-php-ext-enable imagick
 
 # php.ini
 COPY php.ini /usr/local/etc/php/

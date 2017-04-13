@@ -3,9 +3,6 @@ FROM php:5.6-fpm
 RUN apt-get update
 RUN apt-get install -y git wget vim
 
-# 3rd part libraries
-# RUN apt-get install -y imagemagick
-
 # extensions
 # RUN docker-php-ext-install iconv
 # RUN docker-php-ext-install mysql
@@ -23,6 +20,7 @@ RUN apt-get install -y git wget vim
 # RUN apt-get install -y libmemcached-dev zlib1g-dev && pecl install memcached && docker-php-ext-enable memcached
 # RUN apt-get install -y zlib1g-dev && pecl install memcache && docker-php-ext-enable memcache
 # RUN apt-get install pkg-config libssl-dev -y && pecl install mongo && docker-php-ext-enable mongo
+# RUN apt-get install -y libmagickwand-dev && pecl install imagick  && docker-php-ext-enable imagick
 
 # php.ini
 COPY php.ini /usr/local/etc/php/
