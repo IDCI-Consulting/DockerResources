@@ -20,6 +20,7 @@ RUN apt-get install -y zlib1g-dev libicu-dev g++
 #RUN cd /usr/src/php/ext/memcache && phpize && ./configure && make && make test && make install
 
 # php extensions
+
 # RUN docker-php-ext-install -j$(nproc) iconv mcrypt
 # RUN docker-php-ext-install pdo
 # RUN docker-php-ext-install pdo_mysql
@@ -33,6 +34,7 @@ RUN apt-get install -y zlib1g-dev libicu-dev g++
 # RUN docker-php-ext-install memcache
 # RUN docker-php-ext-install intl
 # RUN docker-php-ext-install bcmath
+# RUN docker-php-ext-install pcntl
 # RUN apt-get install -y libmagickwand-dev && pecl install imagick  && docker-php-ext-enable imagick
 
 # php.ini

@@ -10,6 +10,7 @@ RUN apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng12-dev
 RUN apt-get install -y zlib1g-dev libicu-dev g++
 
 # extensions
+
 # RUN docker-php-ext-install mcrypt
 # RUN docker-php-ext-install pdo_mysql
 # RUN docker-php-ext-install gd
@@ -18,6 +19,7 @@ RUN apt-get install -y zlib1g-dev libicu-dev g++
 # RUN docker-php-ext-install mysql
 # RUN docker-php-ext-install zip
 # RUN docker-php-ext-install bcmath
+# RUN docker-php-ext-install pcntl
 # RUN docker-php-ext-configure intl && docker-php-ext-install intl
 # RUN apt-get install -y libmagickwand-dev && pecl install imagick  && docker-php-ext-enable imagick
 

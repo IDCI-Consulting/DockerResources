@@ -1,10 +1,16 @@
 # Variables
 
-target_container ?= php
-sources          ?= src
+target_container    ?= php
+php_sources         ?= .
+js_sources          ?= Resources/public/js
+phpcs_ignored_files ?= vendor/*,app/cache/*
+
+# Change the previous variable with the following parameters for standalone bundle
+#phpcs_ignored_files ?= vendor/*,app/cache/*,Tests/cache/*
 
 mysql_container_name = $(shell docker-compose ps |grep '^[a-Z-]*-mysql' |sed 's/-mysql .*/-mysql/')
 mongo_container_name = $(shell docker-compose ps |grep '^[a-Z-]*-mongo' |sed 's/-mongo .*/-mongo/')
+
 
 # Bash Commands
 
@@ -16,6 +22,7 @@ command:
 bash:
 	docker-compose exec '$(target_container)' bash
 
+
 # Mysql commands
 
 .PHONY: mysql-export
@@ -26,26 +33,23 @@ mysql-export:
 mysql-import:
 	docker exec -i $(mysql_container_name) bash -c 'mysql -p$$MYSQL_PASSWORD -u$$MYSQL_USER $$MYSQL_DATABASE' < $(path)
 
+
 # Mongo commands
 
 .PHONY: mongo-export
 mongo-export:
-	docker exec -i $(mongo_container_name) bash -c 'mongoexport --db $$MONGO_DATABASE --collection $(mongo_collection)' > $(path)
+	docker exec -i $(mongo_container_name) bash -c "mongoexport --host localhost:27017 --db $$MONGO_DATABASE --collection $(collection)" > $(path)
 
 .PHONY: mongo-import
 mongo-import:
-	docker exec -i $(mongo_container_name) bash -c 'mongoimport --db $$MONGO_DATABASE --collection $(mongo_collection)' < $(path)
+	docker exec -i $(mongo_container_name) bash -c "mongoimport --host localhost:27017 --db $$MONGO_DATABASE --collection $(collection)" < $(path)
 
 
 # NodeJs commands
 
-.PHONY: npm-install
-npm-install:
-	docker-compose run --rm node npm install
-
-.PHONY: gulp
-gulp:
-	docker-compose run --rm node gulp $(task)
+.PHONY: eslint
+eslint:
+	docker-compose run --rm node eslint $(js_sources)
 
 
 # PHP commands
@@ -56,34 +60,34 @@ composer-add-github-token:
 
 .PHONY: composer-update
 composer-update:
-	docker-compose run --rm php composer update
+	docker-compose run --rm php composer update $(options)
 
 .PHONY: composer-install
 composer-install:
-	docker-compose run --rm php composer install
+	docker-compose run --rm php composer install $(options)
 
 .PHONY: phploc
 phploc:
-	docker run -i -v `pwd`:/project jolicode/phaudit bash -c "phploc $(sources); exit $$?"
+	docker run --rm -i -v `pwd`:/project jolicode/phaudit bash -c "phploc $(php_sources); exit $$?"
 
 .PHONY: phpcs
 phpcs:
-	docker run -i -v `pwd`:/project jolicode/phaudit bash -c "phpcs $(sources) --standard=PSR2; exit $$?"
+	docker run --rm -i -v `pwd`:/project jolicode/phaudit bash -c "phpcs $(php_sources) --extensions=php --ignore=$(phpcs_ignored_files) --standard=PSR2; exit $$?"
 
 .PHONY: phpcpd
 phpcpd:
-	docker run -i -v `pwd`:/project jolicode/phaudit bash -c "phpcpd $(sources); exit $$?"
+	docker run --rm -i -v `pwd`:/project jolicode/phaudit bash -c "phpcpd $(php_sources); exit $$?"
 
 .PHONY: phpdcd
 phpdcd:
-	docker run -i -v `pwd`:/project jolicode/phaudit bash -c "phpdcd $(sources); exit $$?"
+	docker run --rm -i -v `pwd`:/project jolicode/phaudit bash -c "phpdcd $(php_sources); exit $$?"
 
 
 # Symfony bundle commands
 
 .PHONY: phpunit
 phpunit: ./vendor/bin/phpunit
-	docker-compose run --rm php ./vendor/bin/phpunit --coverage-text
+	docker-compose run --rm php ./vendor/bin/phpunit --coverage-text Tests/
 
 
 # Symfony2.x app commands
