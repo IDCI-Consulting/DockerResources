@@ -38,11 +38,11 @@ mysql-import:
 
 .PHONY: mongo-export
 mongo-export:
-	docker exec -i $(mongo_container_name) bash -c "mongoexport --host localhost:27017 --db $$MONGO_DATABASE --collection $(collection)" > $(path)
+	docker exec -i $(mongo_container_name) bash -c 'mongoexport --host localhost:27017 --db $$MONGO_DATABASE --collection $(collection)' > $(path)
 
 .PHONY: mongo-import
 mongo-import:
-	docker exec -i $(mongo_container_name) bash -c "mongoimport --host localhost:27017 --db $$MONGO_DATABASE --collection $(collection)" < $(path)
+	docker exec -i $(mongo_container_name) bash -c 'mongoimport --host localhost:27017 --db $$MONGO_DATABASE --collection $(collection)' < $(path)
 
 
 # NodeJs commands
@@ -68,19 +68,19 @@ composer-install:
 
 .PHONY: phploc
 phploc:
-	docker run --rm -i -v `pwd`:/project jolicode/phaudit bash -c "phploc $(php_sources); exit $$?"
+	docker run --rm -i -v `pwd`:/project jolicode/phaudit bash -c 'phploc $(php_sources); exit $$?'
 
 .PHONY: phpcs
 phpcs:
-	docker run --rm -i -v `pwd`:/project jolicode/phaudit bash -c "phpcs $(php_sources) --extensions=php --ignore=$(phpcs_ignored_files) --standard=PSR2; exit $$?"
+	docker run --rm -i -v `pwd`:/project jolicode/phaudit bash -c 'phpcs $(php_sources) --extensions=php --ignore=$(phpcs_ignored_files) --standard=PSR2; exit $$?'
 
 .PHONY: phpcpd
 phpcpd:
-	docker run --rm -i -v `pwd`:/project jolicode/phaudit bash -c "phpcpd $(php_sources); exit $$?"
+	docker run --rm -i -v `pwd`:/project jolicode/phaudit bash -c 'phpcpd $(php_sources); exit $$?'
 
 .PHONY: phpdcd
 phpdcd:
-	docker run --rm -i -v `pwd`:/project jolicode/phaudit bash -c "phpdcd $(php_sources); exit $$?"
+	docker run --rm -i -v `pwd`:/project jolicode/phaudit bash -c 'phpdcd $(php_sources); exit $$?'
 
 
 # Symfony bundle commands
