@@ -1,7 +1,6 @@
 FROM ubuntu:16.04
 
-RUN apt-get update
-RUN apt-get install -y curl xvfb chromium-browser firefox ruby ruby-dev
+RUN apt-get update && apt-get install -y curl xvfb chromium-browser firefox ruby ruby-dev npm
 
 WORKDIR /usr/src/app
 
