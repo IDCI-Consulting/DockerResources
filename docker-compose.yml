@@ -44,7 +44,8 @@ services:
     image: ${COMPANY_NAME}-${PROJECT_NAME}/php:${PHP_VERSION}-fpm
     container_name: ${COMPANY_NAME}-${PROJECT_NAME}-php
     build:
-      context: docker/build/php${PHP_VERSION}
+      context: docker/build/php
+      dockerfile: Dockerfile-${PHP_VERSION}
     volumes:
       - ./:/var/www/html
       - ${VOLUME_ROOT_PATH}/${COMPANY_NAME}/${PROJECT_NAME}/composer:/root/.composer
