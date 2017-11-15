@@ -1,5 +1,16 @@
 version: '2'
 
+volumes:
+  composer:
+    external: true
+  mysql:
+
+networks:
+
+  default:
+    external:
+      name: ${NETWORK_NAME}
+
 services:
 
   rabbitmq:
@@ -29,7 +40,7 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     volumes:
-      - ${VOLUME_ROOT_PATH}/${COMPANY_NAME}/${PROJECT_NAME}/mysql:/var/lib/mysql
+      - mysql:/var/lib/mysql
       - ./docker/conf/mysql/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
 
   adminer:
@@ -48,7 +59,7 @@ services:
       dockerfile: Dockerfile-${PHP_VERSION}
     volumes:
       - ./:/var/www/html
-      - ${VOLUME_ROOT_PATH}/${COMPANY_NAME}/${PROJECT_NAME}/composer:/root/.composer
+      - composer:/root/.composer
     depends_on:
       - mysql
 
@@ -59,17 +70,10 @@ services:
       - VIRTUAL_HOST=${VIRTUAL_HOST_NGINX}
       - PHP_CONTAINER_NAME=${COMPANY_NAME}-${PROJECT_NAME}-php
       - SYMFONY_ENTRYPOINT=${SYMFONY_ENTRYPOINT}
-    volumes_from:
-      - php
     volumes:
+      - ./:/var/www/html
       - ./docker/conf/nginx/vhost_symfony.conf.template:/etc/nginx/vhost_symfony.conf.template
       - ./docker/conf/nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - php
     command: /bin/bash -c "envsubst '$$PHP_CONTAINER_NAME $$SYMFONY_ENTRYPOINT' < /etc/nginx/vhost_symfony.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
-
-networks:
-
-  default:
-    external:
-      name: ${NETWORK_NAME}
